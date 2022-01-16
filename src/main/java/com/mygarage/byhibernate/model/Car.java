@@ -11,8 +11,7 @@ public class Car {
     private int id;
     private String brand;
     private String model;
-    @Enumerated(EnumType.ORDINAL)
-    private BodyType bodyType;
+    private String bodyType;
     private int yearOfManufacture;
     @Enumerated(EnumType.ORDINAL)
     private EngineType engineType;
@@ -22,15 +21,19 @@ public class Car {
     private String comment;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     public Car(){}
+     public Car(String brand, String model, String bodyType, String color, String comment, double engineVolume,int yearOfManufacture, int mark, EngineType engineType){
+        this.brand = brand;
+        this.model = model;
+        this.bodyType = bodyType;
+        this.color = color;
+        this.comment = comment;
+        this.engineVolume = engineVolume;
+        this.yearOfManufacture = yearOfManufacture;
+        this.mark = mark;
+        this.engineType = engineType;
 
-    public User getUser() {
-        return user;
-    }
+     }
 
 
 
@@ -74,11 +77,11 @@ public class Car {
         this.model = model;
     }
 
-    public BodyType getBodyType() {
+    public String getBodyType() {
         return bodyType;
     }
 
-    public void setBodyType(BodyType bodyType) {
+    public void setBodyType(String bodyType) {
         this.bodyType = bodyType;
     }
 

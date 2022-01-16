@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a href="home" class="navbar-brand">
-            <img src="../images/main-logo.jpg" height="16"
+        <a href="login" class="navbar-brand">
+            <img src="https://gofrag.ru/images/100/my-garage-1.jpg" height="60"
                  alt="MyGarageLogo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -27,12 +27,15 @@
                                 </li>
                             </c:otherwise>
                         </c:choose>
+                        <c:if test="${sessionScope.userRole!='USER'}">
                         <li class="nav-item">
                             <div class="d-flex">
                                 <form action="search" method="post">
                                     <input class="form-control me-2" type="search" name="search" placeholder="Search"
                                            aria-label="Search">
-                                    <button class="btn btn-outline-light" type="submit">Поиск</button>
+                                    <button class="btn btn-outline-light" type="submit">Search</button>
+                                    </c:if>
+
                                 </form>
                             </div>
                         </li>

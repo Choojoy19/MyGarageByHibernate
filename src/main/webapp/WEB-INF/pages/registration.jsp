@@ -8,9 +8,10 @@
 </head>
 <body>
 <div style="background: black" >
-    <img src="../../images/main-logo.jpg" alt="logo"
-         width="100px" height="75px">
-     <a href="login" style="color: blue; font-size: small">На главную</a>
+    <img src="https://gofrag.ru/images/100/my-garage-1.jpg" alt="logo"
+         width="160px" height="75px">
+     <a href="login" style="color: blue; font-size:medium">Назад</a>
+
 </div>
 <div style= "width:100%; height:100%; background: black; top: 70px">
     <form action="add" method="post" style="width:28%; height:300px; position: absolute; left: 530px">
@@ -40,7 +41,7 @@
             <input type="text" class="form-control" name="city" id="city">
         </div>
         <div class="mb-2">
-            <label for="age" class="form-label" style= "color:orange; font-size: large">Дата рождения</label>
+            <label for="age" class="form-label" style= "color:orange; font-size: large">Возраст</label>
             <input type="text" class="form-control" name="age" id="age">
         </div>
 

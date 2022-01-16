@@ -11,7 +11,7 @@
 
 <body>
 <div class="ui-icon">
-    <img src="main-logo.jpg" alt="logo"
+    <img src="https://gofrag.ru/images/100/my-garage-1.jpg" alt="logo"
          width="100%" height="20%">
 </div>
 
@@ -20,10 +20,10 @@
         <a class="nav-link active" aria-current="page" href="registration">Регистрация</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Рейтинг автомобилей/Отзывы</a>
+        <a class="nav-link" href="listcar">Рейтинг автомобилей/Отзывы</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/html/info.html">Информация</a>
+        <a class="nav-link" href="info">Информация</a>
     </li>
 
 </ul>

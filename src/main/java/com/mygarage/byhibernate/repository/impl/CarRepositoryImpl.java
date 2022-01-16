@@ -16,7 +16,7 @@ public class CarRepositoryImpl implements BaseRepository<Car> {
     public List<Car> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
 
-        return (List<Car>) session.createQuery("from Car ").getResultList();
+        return (List<Car>) session.createQuery("from Car").getResultList();
     }
 
     @Override

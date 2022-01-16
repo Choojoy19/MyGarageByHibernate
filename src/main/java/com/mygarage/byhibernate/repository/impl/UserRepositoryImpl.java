@@ -21,9 +21,10 @@ public class UserRepositoryImpl implements BaseRepository<User> {
     @Override
     public User findById(long id) {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
-        return session.get(User.class, id);
+        User user = session.get(User.class, id);
+        session.close();
+        return user;
     }
-
 
 
     @Override
@@ -85,6 +86,7 @@ public class UserRepositoryImpl implements BaseRepository<User> {
         Query<?> query = session.createQuery("from User where login=:login and password=:password");
         query.setParameter("login", login);
         query.setParameter("password", password);
+        //User par = (User) query.getSingleResult();
         try {
             return (User) query.getSingleResult();
         } catch (NoResultException e) {

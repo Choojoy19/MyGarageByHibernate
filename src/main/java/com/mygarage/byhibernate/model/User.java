@@ -1,7 +1,6 @@
 package com.mygarage.byhibernate.model;
 
-
-
+import com.mygarage.byhibernate.model.Car;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +20,8 @@ public class User {
     private int age;
     @Enumerated(EnumType.ORDINAL)
     private Role role;
-    @OneToMany (mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private List<Car> cars;
 
     public User(){}
@@ -40,7 +40,11 @@ public class User {
 
     public void setCars(List<Car> cars) {
         this.cars = cars;
+       // cars.forEach(car -> car.setUser(this));
+        
     }
+
+    
 
     public Role getRole() {
         return role;
