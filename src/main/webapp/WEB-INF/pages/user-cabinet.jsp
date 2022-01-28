@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Добро пожаловать ${user.name}</title>
+    <title>Добро пожаловать ${sessionScope.user.name}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -15,6 +15,9 @@
 <ul class="nav" style="background: rgb(20,0,0)">
     <li class="nav-item"  >
         <a class="nav-link active" aria-current="page" href="addсar">Добавить авто</a>
+    </li>
+    <li class="nav-item"  >
+        <a class="nav-link active" aria-current="page" href="userexpenses">Список раcходов по Вашим автомобилям</a>
     </li>
 
 </ul>
@@ -39,7 +42,7 @@
             </c:if>
         </tr>
         </thead>
-        <c:forEach var="car" items="${requestScope.userCabinet}" varStatus="st">
+        <c:forEach var="car" items="${requestScope.cars}" varStatus="st">
             <tr>
                 <th class="text-center align-middle" scope="row">${st.index}</th>
                 <td class="text-center align-middle">${car.brand}</td>
@@ -48,15 +51,15 @@
                 <td class="text-center align-middle">${car.bodyType}</td>
                 <td class="text-center align-middle">${car.engineType}</td>
                 <td class="text-center align-middle">${car.engineVolume}</td>
-                <td class="text-center align-middle">${car.color}</td>
+                <td class="taext-center align-middle">${car.color}</td>
                 <td class="text-center align-middle">${car.mark}</td>
                 <td class="text-center align-middle">${car.comment}</td>
 
                     <td class="text-center align-middle">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="addcar?id=${car.id}" class="btn btn-primary" role="button">Редактировать</a>
-                            <a href="delete?id=${car.id}" class="btn btn-secondary" role="button">Удалить</a>
-                            <a href="delete?id=${car.id}" class="btn btn-danger" role="button">Расходы</a>
+                            <a href="editcar?id=${car.id}" class="btn btn-primary" role="button">Редактировать</a>
+                            <a href="deletecar?id=${car.id}" class="btn btn-secondary" role="button">Удалить</a>
+                            <a href="carexpenses?id=${car.id}" class="btn btn-danger" role="button">Расходы</a>
                         </div>
                     </td>
 

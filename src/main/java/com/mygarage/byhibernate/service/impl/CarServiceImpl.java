@@ -35,8 +35,4 @@ public class CarServiceImpl implements BaseService<Car> {
         return repository.update(entity);
     }
 
-    @Override
-    public Car findByLoginAndPassword(String brand, String model) {
-        return repository.findByLoginAndPassword(brand, model);
-    }
 }

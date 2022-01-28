@@ -2,7 +2,6 @@ package com.mygarage.byhibernate.repository.impl;
 
 import com.mygarage.byhibernate.config.ConfigSessionFactory;
 import com.mygarage.byhibernate.model.Car;
-import com.mygarage.byhibernate.model.User;
 import com.mygarage.byhibernate.repository.BaseRepository;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -48,7 +47,7 @@ public class CarRepositoryImpl implements BaseRepository<Car> {
         Transaction transaction = null;
         try (Session session = ConfigSessionFactory.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(entity);
+            session.merge(entity);
             transaction.commit();
             return session.get(Car.class, entity.getId());
         } catch (Exception exc) {
@@ -69,6 +68,7 @@ public class CarRepositoryImpl implements BaseRepository<Car> {
             if (car != null) {
                 session.delete(car);
                 transaction.commit();
+                //session.close();
                 return true;
             }
         } catch (Exception e) {
@@ -80,18 +80,6 @@ public class CarRepositoryImpl implements BaseRepository<Car> {
         return false;
     }
 
-    @Override
-    public Car findByLoginAndPassword(String brand, String model) {
-        Session session = ConfigSessionFactory.getSessionFactory().openSession();
-        Query<?> query = session.createQuery("from Car where brand=:brand and model=:model");
-        query.setParameter("brand", brand);
-        query.setParameter("model", model);
-        try {
-            return (Car) query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
 }
 
 

@@ -1,6 +1,7 @@
 package com.mygarage.byhibernate.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -8,7 +9,7 @@ import java.util.Objects;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String brand;
     private String model;
     private String bodyType;
@@ -19,6 +20,9 @@ public class Car {
     private String color;
     private int mark;
     private String comment;
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_id")
+    private List<Expenses> expenses;
 
 
     public Car(){}
@@ -35,7 +39,13 @@ public class Car {
 
      }
 
+    public List<Expenses> getExpenses() {
+        return expenses;
+    }
 
+    public void setExpenses(List<Expenses> expenses) {
+        this.expenses = expenses;
+    }
 
     public int getMark() {
         return mark;
@@ -53,11 +63,11 @@ public class Car {
         this.comment = comment;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

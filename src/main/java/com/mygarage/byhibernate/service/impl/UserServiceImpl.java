@@ -1,14 +1,14 @@
 package com.mygarage.byhibernate.service.impl;
 
 import com.mygarage.byhibernate.model.User;
-import com.mygarage.byhibernate.repository.BaseRepository;
+import com.mygarage.byhibernate.repository.BaseUserRepository;
 import com.mygarage.byhibernate.repository.impl.UserRepositoryImpl;
-import com.mygarage.byhibernate.service.BaseService;
+import com.mygarage.byhibernate.service.BaseUserService;
 
 import java.util.List;
 
-public class UserServiceImpl implements BaseService<User> {
-    private final BaseRepository<User> repository = new UserRepositoryImpl();
+public class UserServiceImpl implements BaseUserService<User> {
+    private final BaseUserRepository<User> repository = new UserRepositoryImpl();
     @Override
     public List<User> findAll() {
         return repository.findAll();

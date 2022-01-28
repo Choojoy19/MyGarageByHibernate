@@ -1,8 +1,8 @@
 package com.mygarage.byhibernate.repository;
 
-import com.mygarage.byhibernate.model.User;
 
-public interface BaseUserRepository extends BaseRepository{
+public interface BaseUserRepository<T> extends BaseRepository<T>{
 
+    T findByLoginAndPassword(String login, String password);
 
 }

@@ -2,6 +2,7 @@ package com.mygarage.byhibernate.config;
 
 
 import com.mygarage.byhibernate.model.Car;
+import com.mygarage.byhibernate.model.Expenses;
 import com.mygarage.byhibernate.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -31,7 +32,7 @@ public class ConfigSessionFactory {
                 configuration.setProperties(settings);
                 configuration.addAnnotatedClass(User.class);
                 configuration.addAnnotatedClass(Car.class);
-
+                configuration.addAnnotatedClass(Expenses.class);
                 sessionFactory = configuration
                         .buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
                                 .build());
