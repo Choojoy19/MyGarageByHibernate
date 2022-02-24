@@ -3,6 +3,7 @@ package com.mygarage.byhibernate.model;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "cars")
@@ -22,7 +23,7 @@ public class Car {
     private String comment;
     @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id")
-    private List<Expenses> expenses;
+    private Set<Expenses> expenses;
 
 
     public Car(){}
@@ -39,11 +40,11 @@ public class Car {
 
      }
 
-    public List<Expenses> getExpenses() {
+    public Set<Expenses> getExpenses() {
         return expenses;
     }
 
-    public void setExpenses(List<Expenses> expenses) {
+    public void setExpenses(Set<Expenses> expenses) {
         this.expenses = expenses;
     }
 

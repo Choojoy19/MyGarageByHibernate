@@ -6,11 +6,12 @@ import com.mygarage.byhibernate.repository.impl.UserRepositoryImpl;
 import com.mygarage.byhibernate.service.BaseUserService;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserServiceImpl implements BaseUserService<User> {
     private final BaseUserRepository<User> repository = new UserRepositoryImpl();
     @Override
-    public List<User> findAll() {
+    public Set<User> findAll() {
         return repository.findAll();
     }
 

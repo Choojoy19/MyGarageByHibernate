@@ -14,7 +14,7 @@
 
 <ul class="nav" style="background: rgb(20,0,0)">
     <li class="nav-item"  >
-        <a class="nav-link active" aria-current="page" href="addсar">Добавить авто</a>
+        <a class="nav-link active" aria-current="page" href="addcar">Добавить авто</a>
     </li>
     <li class="nav-item"  >
         <a class="nav-link active" aria-current="page" href="userexpenses">Список раcходов по Вашим автомобилям</a>

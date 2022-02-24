@@ -9,13 +9,14 @@ import org.hibernate.Transaction;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Set;
 
 public class CarRepositoryImpl implements BaseRepository<Car> {
     @Override
-    public List<Car> findAll() {
+    public Set<Car> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
 
-        return (List<Car>) session.createQuery("from Car").getResultList();
+        return (Set<Car>) session.createQuery("from Car").getResultList();
     }
 
     @Override

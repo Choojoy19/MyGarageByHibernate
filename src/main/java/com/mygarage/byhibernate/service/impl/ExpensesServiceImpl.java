@@ -1,17 +1,17 @@
 package com.mygarage.byhibernate.service.impl;
 
-
 import com.mygarage.byhibernate.model.Expenses;
-import com.mygarage.byhibernate.repository.BaseRepository;
+import com.mygarage.byhibernate.repository.ExpensesRepository;
 import com.mygarage.byhibernate.repository.impl.ExpensesRepositoryImpl;
-import com.mygarage.byhibernate.service.BaseService;
+import com.mygarage.byhibernate.service.ExpensesService;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Set;
 
-public class ExpensesServiceImpl implements BaseService<Expenses> {
-    private final BaseRepository<Expenses> repository = new ExpensesRepositoryImpl();
+public class ExpensesServiceImpl implements ExpensesService {
+    private final ExpensesRepository repository = new ExpensesRepositoryImpl();
     @Override
-    public List<Expenses> findAll() {
+    public Set<Expenses> findAll() {
         return repository.findAll();
     }
 
@@ -34,4 +34,8 @@ public class ExpensesServiceImpl implements BaseService<Expenses> {
         return repository.update(entity);
     }
 
+    @Override
+    public String sumExpense(LocalDate fromDate, LocalDate toDate, String id, String typeOfExpense) {
+        return repository.sumExpense(fromDate, toDate, id, typeOfExpense);
+    }
 }

@@ -1,9 +1,10 @@
 package com.mygarage.byhibernate.repository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BaseRepository<T> {
-    List<T> findAll();
+    Set<T> findAll();
     T findById(long id);
     boolean create(T entity);
     T update (T entity);

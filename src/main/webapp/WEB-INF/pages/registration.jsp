@@ -48,7 +48,7 @@
         <button type="submit" class="btn btn-dark">Регистрация</button>
         <button type="reset" class="btn btn-dark">Очистить форму</button>
         </br>
-        <c:if test="${requestScope.invalidLoginOrPassword == true}">
+        <c:if test="">
             <p class="text-start text-danger">Такой логин существует! Попробуйте еще раз</p>
         </c:if>
     </form>

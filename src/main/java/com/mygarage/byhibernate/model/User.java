@@ -4,6 +4,7 @@ import com.mygarage.byhibernate.model.Car;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -22,7 +23,7 @@ public class User {
     private Role role;
     @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private List<Car> cars;
+    private Set<Car> cars;
 
     public User(){}
 
@@ -34,11 +35,11 @@ public class User {
 
     }
 
-    public List<Car> getCars() {
+    public Set<Car> getCars() {
         return cars;
     }
 
-    public void setCars(List<Car> cars) {
+    public void setCars(Set<Car> cars) {
         this.cars = cars;
        // cars.forEach(car -> car.setUser(this));
         
@@ -115,14 +116,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id;
+        return id == user.id && age == user.age && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(city, user.city) && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, login, password, name, lastName, city, age, role);
     }
-
-
-
 }

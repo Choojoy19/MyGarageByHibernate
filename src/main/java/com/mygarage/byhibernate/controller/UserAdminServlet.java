@@ -3,10 +3,10 @@ package com.mygarage.byhibernate.controller;
 import com.mygarage.byhibernate.model.*;
 import com.mygarage.byhibernate.service.BaseService;
 import com.mygarage.byhibernate.service.BaseUserService;
+import com.mygarage.byhibernate.service.ExpensesService;
 import com.mygarage.byhibernate.service.impl.CarServiceImpl;
 import com.mygarage.byhibernate.service.impl.ExpensesServiceImpl;
 import com.mygarage.byhibernate.service.impl.UserServiceImpl;
-import com.mysql.cj.Query;
 
 
 import javax.servlet.RequestDispatcher;
@@ -20,17 +20,16 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @WebServlet("/")
 public class UserAdminServlet extends HttpServlet {
     private BaseUserService<User> service;
     private BaseService<Car> carService;
-    private BaseService<Expenses> expensesService;
+    private ExpensesService expensesService;
 
     public void init() {
         service = new UserServiceImpl();
@@ -56,10 +55,12 @@ public class UserAdminServlet extends HttpServlet {
                 case "/editcar" -> showCarEditForm(req, resp);
                 case "/list" -> listUser(req, resp);
                 case "/cabinet" -> userCabinet(req,resp);
-                case "/addñar" -> addCarForm(req, resp);
+                case "/addcar" -> addCarForm(req, resp);
                 case "/addnewcar" -> addCar(req, resp);
                 case "/addexpense" -> addExpenseForm(req, resp);
                 case "/addnewexpense" -> addExpense(req, resp);
+                case "/deleteexpense" -> deleteExpense(req, resp);
+                case "/sumExpense" -> sumExpense(req, resp);
                 case "/listcar" -> listCars(req,resp);
                 case "/info" -> informationForm(req, resp);
                 case "/userexpenses" -> listUserExpenses(req,resp);
@@ -70,6 +71,7 @@ public class UserAdminServlet extends HttpServlet {
             throw new ServletException(exc);
         }
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException{
         doGet(req, resp);
@@ -77,11 +79,11 @@ public class UserAdminServlet extends HttpServlet {
 
     private void listUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String search = req.getParameter("search");
-        List<User> users = service.findAll();
+        Set<User> users = service.findAll();
         if (search != null) {
             users = users.stream().filter(user -> user.getName().contains(search) ||
                     user.getLastName().contains(search) ||
-                    user.getCity().contains(search)).collect(Collectors.toList());
+                    user.getCity().contains(search)).collect(Collectors.toSet());
         }
         req.setAttribute("listUser", users);
         ServletContext servletContext = getServletContext();
@@ -91,9 +93,9 @@ public class UserAdminServlet extends HttpServlet {
 
     private void listCars(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String search = req.getParameter("search");
-        List<Car> cars = carService.findAll();
+        Set<Car> cars = carService.findAll();
         if (search != null) {
-            cars = cars.stream().filter(car -> car.getBrand().contains(search)&&car.getModel().contains(search)).collect(Collectors.toList());
+            cars = cars.stream().filter(car -> car.getBrand().contains(search)&&car.getModel().contains(search)).collect(Collectors.toSet());
         }
         req.setAttribute("listCars", cars);
         ServletContext servletContext = getServletContext();
@@ -107,16 +109,35 @@ public class UserAdminServlet extends HttpServlet {
         req.setAttribute("listCarExpenses", car.getExpenses());
         req.setAttribute("id", id);
         req.setAttribute("car", car);
+        String sumExpOut= req.getParameter("sumExpOut");
+       // if (sumExpOut!=null ){
+            req.setAttribute("sumExpOut",sumExpOut);
+
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/list-carexpenses.jsp");
         dispatcher.forward(req, resp);
     }
 
+    private void sumExpense (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int id = Integer.parseInt(req.getParameter("id"));
+        try {
+            LocalDate fromDate = LocalDate.parse(req.getParameter("fromDate"));
+            LocalDate toDate = LocalDate.parse(req.getParameter("toDate"));
+            String typeOfExpense = req.getParameter("typeOfExpense");
+            String sumExpOut = expensesService.sumExpense(fromDate, toDate, String.valueOf(id), typeOfExpense);
+            req.setAttribute("id", id);
+            if (sumExpOut.equals("null")) resp.sendRedirect("carexpenses?id=" + id + "&sumExpOut=check the entered parameters");
+            else resp.sendRedirect("carexpenses?id="+id+"&sumExpOut="+sumExpOut);
+        }catch (DateTimeParseException e){
+            resp.sendRedirect("carexpenses?id=" + id + "&sumExpOut=select date");
+        }
+    }
+
     private void listUserExpenses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user=(User) session.getAttribute("user");
-        List<Car> cars = user.getCars();
-        List<Expenses> expenses = new ArrayList<Expenses>();
+        Set<Car> cars = user.getCars();
+        Set<Expenses> expenses = new LinkedHashSet<Expenses>();
         for (Car car: cars){
             expenses.addAll( car.getExpenses());
         }
@@ -162,7 +183,7 @@ public class UserAdminServlet extends HttpServlet {
         Car car = new Car(brand,model,bodyType, color, comment, engineVolume, yearOfManufacture, mark, engineType1);
         User user=(User) session.getAttribute("user");
         User userBd = service.findById(user.getId());
-        List<Car> cars = userBd.getCars();
+        Set<Car> cars = userBd.getCars(); //!!!!!!!!!!!!!!!!
         cars.add(car);
         userBd.setCars(cars);
         service.update(userBd);
@@ -179,7 +200,7 @@ public class UserAdminServlet extends HttpServlet {
         Expenses expense = new Expenses(date,typeOfExpense,price,commentExp);
         //expensesService.create(expense);
         Car car = carService.findById(id);
-        List<Expenses> expenses = car.getExpenses();
+        Set<Expenses> expenses = car.getExpenses();
         expenses.add(expense);
         car.setExpenses(expenses);
         carService.update(car);
@@ -187,6 +208,11 @@ public class UserAdminServlet extends HttpServlet {
         resp.sendRedirect("carexpenses?id="+id);
     }
 
+    private void deleteExpense(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        expensesService.deleteById(id);
+        resp.sendRedirect("carexpenses?id="+id);
+    }
 
     private void addUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -195,6 +221,7 @@ public class UserAdminServlet extends HttpServlet {
         String city = req.getParameter("city");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String password1 = req.getParameter("password1");
         int age = Integer.parseInt(req.getParameter("age"));
         Role role = Role.USER;
         User user = new User(name, lastName, city, age);
@@ -252,7 +279,6 @@ public class UserAdminServlet extends HttpServlet {
         user.setPassword(password);
         Role role = Role.USER;
         user.setRole(role);
-        //List<Car> cars = user;
         service.update(user);
         resp.sendRedirect("list");
     }
@@ -260,12 +286,21 @@ public class UserAdminServlet extends HttpServlet {
     private void updateCar(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         String comment = req.getParameter("comment");
-        int mark = Integer.parseInt(req.getParameter("mark"));
         Car car = carService.findById(id);
-        car.setMark(mark);
-        car.setComment(comment);
-        carService.update(car);
-        resp.sendRedirect("cabinet");
+        try {
+            int mark = Integer.parseInt(req.getParameter("mark"));
+            car.setMark(mark);
+            car.setComment(comment);
+            carService.update(car);
+            resp.sendRedirect("cabinet");
+        }catch (NumberFormatException e){
+            int lastMark = car.getMark();
+            car.setMark(lastMark);
+            car.setComment(comment);
+            carService.update(car);
+            resp.sendRedirect("cabinet");
+        }
+
     }
 
     private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -280,7 +315,7 @@ public class UserAdminServlet extends HttpServlet {
         HttpSession session = req.getSession();
         User user=(User) session.getAttribute("user");
         User userBd = service.findById(user.getId());
-        List<Car> cars = userBd.getCars();
+        Set<Car> cars = userBd.getCars();
         service.update(userBd);
         session.setAttribute("user", userBd);
         resp.sendRedirect("cabinet");

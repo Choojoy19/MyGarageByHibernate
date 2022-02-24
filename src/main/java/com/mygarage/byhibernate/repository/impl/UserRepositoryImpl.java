@@ -10,13 +10,15 @@ import org.hibernate.Transaction;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserRepositoryImpl implements BaseUserRepository<User> {
     @Override
-    public List<User> findAll() {
+    public Set<User> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
 
-        return (List<User>) session.createQuery("from User ").getResultList();
+        return (Set<User>) session.createQuery("from User ").stream().collect(Collectors.toSet());
     }
 
     @Override

@@ -1,20 +1,25 @@
 package com.mygarage.byhibernate.repository.impl;
 
 import com.mygarage.byhibernate.config.ConfigSessionFactory;
-import com.mygarage.byhibernate.model.Car;
 import com.mygarage.byhibernate.model.Expenses;
-import com.mygarage.byhibernate.repository.BaseRepository;
+import com.mygarage.byhibernate.repository.ExpensesRepository;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
-public class ExpensesRepositoryImpl implements BaseRepository<Expenses> {
+public class ExpensesRepositoryImpl implements ExpensesRepository {
+
+
+
     @Override
-    public List<Expenses> findAll() {
+    public Set<Expenses> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
 
-        return (List<Expenses>) session.createQuery("from Expenses").getResultList();
+        return (Set<Expenses>) session.createQuery("from Expenses").getResultList();
     }
 
     @Override
@@ -76,5 +81,22 @@ public class ExpensesRepositoryImpl implements BaseRepository<Expenses> {
         }
 
         return false;
+    }
+
+    @Override
+    public String sumExpense(LocalDate fromDate, LocalDate toDate, String id, String typeOfExpense) {
+        Session session = ConfigSessionFactory.getSessionFactory().openSession();
+        if (typeOfExpense.equals("allexpenses")){
+            String hqlSum = "select sum (e.price) from Car c inner join c.expenses as e where c.id =:id and (e.date) between :fromDate and :toDate";
+            Long result = (Long) session.createQuery(hqlSum).setString("id",id)
+                    .setParameter("fromDate", fromDate)
+                    .setParameter("toDate", toDate).list().get(0);
+            return String.valueOf(result);
+        } else {
+            String hqlSum = "select sum (e.price) from Car c inner join c.expenses as e where c.id =:id and (e.date) between :fromDate and :toDate and (e.typeOfExpense) =: type";
+            Long result = (Long) session.createQuery(hqlSum).setString("id",id).setParameter("fromDate", fromDate).setParameter("toDate", toDate).setString("type", typeOfExpense).list().get(0);
+             return String.valueOf(result);
+        }
+
     }
 }

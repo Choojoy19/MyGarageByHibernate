@@ -7,12 +7,12 @@ import com.mygarage.byhibernate.repository.impl.CarRepositoryImpl;
 import com.mygarage.byhibernate.repository.impl.UserRepositoryImpl;
 import com.mygarage.byhibernate.service.BaseService;
 
-import java.util.List;
+import java.util.Set;
 
 public class CarServiceImpl implements BaseService<Car> {
     private final BaseRepository<Car> repository = new CarRepositoryImpl();
     @Override
-    public List<Car> findAll() {
+    public Set<Car> findAll() {
         return repository.findAll();
     }
 

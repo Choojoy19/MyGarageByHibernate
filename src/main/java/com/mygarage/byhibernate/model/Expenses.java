@@ -4,6 +4,7 @@ import javax.persistence.*;
 //import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "expenses")
@@ -65,6 +66,16 @@ public class Expenses {
         this.commentExp = comment;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Expenses expenses = (Expenses) o;
+        return id == expenses.id && price == expenses.price && Objects.equals(date, expenses.date) && Objects.equals(typeOfExpense, expenses.typeOfExpense) && Objects.equals(commentExp, expenses.commentExp);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date, typeOfExpense, price, commentExp);
+    }
 }

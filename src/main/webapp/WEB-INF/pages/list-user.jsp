@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>User Management Application</title>
+    <title>Управление данными пользователей</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -24,9 +24,7 @@
             <th class="text-center" scope="col">Возраст</th>
             <th class="text-center" scope="col">Логин</th>
             <th class="text-center" scope="col">Пароль</th>
-            <%--   <c:if test="${sessionScope.userRole.equals('ADMIN')}">--%>
-                <th class="text-center" scope="col">Действие</th>
-            <%--</c:if>--%>
+            <th class="text-center" scope="col">Действие</th>
         </tr>
         </thead>
         <c:forEach var="user" items="${requestScope.listUser}" varStatus="st">
@@ -39,14 +37,12 @@
                 <td class="text-center align-middle">${user.age}</td>
                 <td class="text-center align-middle">${user.login}</td>
                 <td class="text-center align-middle">${user.password}</td>
-            <%--<c:if test="${sessionScope.userRole.equals('ADMIN')}">--%>
                <td class="text-center align-middle">
                    <div class="btn-group" role="group" aria-label="Basic example">
                        <a href="edit?id=${user.id}" class="btn btn-primary" role="button">Редактировать</a>
                        <a href="delete?id=${user.id}" class="btn btn-secondary" role="button">Удалить</a>
                    </div>
                </td>
-           <%-- </c:if>--%>
        </tr>
    </c:forEach>
 </table>
