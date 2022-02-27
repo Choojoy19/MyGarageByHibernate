@@ -179,11 +179,15 @@ public class UserAdminServlet extends HttpServlet {
         int yearOfManufacture = Integer.parseInt(req.getParameter("yearOfManufacture"));
         int mark = Integer.parseInt(req.getParameter("mark"));
         String engineType = req.getParameter("engineType");
-        EngineType engineType1 = EngineType.valueOf(engineType.toUpperCase(Locale.ROOT));
-        Car car = new Car(brand,model,bodyType, color, comment, engineVolume, yearOfManufacture, mark, engineType1);
+        EngineType engineType1 = EngineType.fromString(engineType);
+        Car car = new Car(brand,model,bodyType, color, comment);
+        car.setEngineVolume(engineVolume);
+        car.setYearOfManufacture(yearOfManufacture);
+        car.setMark(mark);
+        car.setEngineType(engineType1);
         User user=(User) session.getAttribute("user");
         User userBd = service.findById(user.getId());
-        Set<Car> cars = userBd.getCars(); //!!!!!!!!!!!!!!!!
+        Set<Car> cars = userBd.getCars();
         cars.add(car);
         userBd.setCars(cars);
         service.update(userBd);

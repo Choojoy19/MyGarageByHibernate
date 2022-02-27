@@ -21,13 +21,14 @@
             <div id="emailHelp" class="form-text" style="font-size: small">Используйте только латинские буквы и цифры</div>
         </div>
         <div class="mb-2">
-            <label for="choosePassword" class="form-label" style= "color:orange; font-size: large">Пароль</label>
-            <input type="password" class="form-control" name="password" id="choosePassword" required>
+            <label for="pass" class="form-label" style= "color:orange; font-size: large">Пароль</label>
+            <input type="password" class="form-control" name="password" id="pass" required>
         </div>
         <div class="mb-2">
-            <label for="confirmPassword" class="form-label" style= "color:orange; font-size: large">Повторите пароль</label>
-            <input type="password" class="form-control" name="password1" id="confirmPassword" required>
+            <label for="repPass" class="form-label" style= "color:orange; font-size: large">Повторите пароль</label>
+            <input type="password" class="form-control" name="password1" id="repPass" required>
         </div>
+        <div id="errorBlock"></div>
         <div class="mb-2">
             <label for="chooseName" class="form-label" style= "color:orange; font-size: large">Имя</label>
             <input type="text" class="form-control" name="name" id="chooseName">
@@ -48,10 +49,13 @@
         <button type="submit" class="btn btn-dark">Регистрация</button>
         <button type="reset" class="btn btn-dark">Очистить форму</button>
         </br>
-        <c:if test="">
+      <%--  <c:if test="">
             <p class="text-start text-danger">Такой логин существует! Попробуйте еще раз</p>
-        </c:if>
+        </c:if> --%>
     </form>
+    <script>
+        <%@ include file="../../JS/confirmPassword.js" %>
+    </script>
 </div>
 </body>
 </html>

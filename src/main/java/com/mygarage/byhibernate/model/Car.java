@@ -27,16 +27,13 @@ public class Car {
 
 
     public Car(){}
-     public Car(String brand, String model, String bodyType, String color, String comment, double engineVolume,int yearOfManufacture, int mark, EngineType engineType){
+     public Car(String brand, String model, String bodyType, String color, String comment){
         this.brand = brand;
         this.model = model;
         this.bodyType = bodyType;
         this.color = color;
         this.comment = comment;
-        this.engineVolume = engineVolume;
-        this.yearOfManufacture = yearOfManufacture;
-        this.mark = mark;
-        this.engineType = engineType;
+
 
      }
 

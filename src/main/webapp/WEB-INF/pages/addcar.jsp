@@ -69,7 +69,7 @@
                 <label class="form-check-label" for="inlineRadio2" style= "color:blue">2</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="mark" id="inlineRadio3" value="3">
+                <input class="form-check-input" type="radio" name="mark" id="inlineRadio3" value="3" checked>
                 <label class="form-check-label" for="inlineRadio3" style= "color:blue">3</label>
             </div>
             <div class="form-check form-check-inline">
