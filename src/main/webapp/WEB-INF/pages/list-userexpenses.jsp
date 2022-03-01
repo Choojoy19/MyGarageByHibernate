@@ -25,11 +25,11 @@
         <thead>
         <tr>
             <th class="text-center" scope="col">№/Сортировка</th>
-            <th class="text-center" scope="col"><button value="sortByDateAsc" name="sortByDateAsc" onclick="" type="submit" title="По возрастанию" style="background: antiquewhite; border: antiquewhite">	&#8593;</button>Дата<button value="activate" name="button25" type="submit" title="По убыванию" style="background: antiquewhite; border: antiquewhite">&#8595;</button></th>
+            <th class="text-center" scope="col">Дата</th>
             <th class="text-center" scope="col">Марка</th>
             <th class="text-center" scope="col">Модель</th>
-            <th class="text-center" scope="col"><a href="deleteexpense?id=${expenses.id}&carid=${requestScope.car.id}" title="По убыванию" role="button" style="background: antiquewhite; border: antiquewhite">&#8595;</a>Тип траты</th>
-            <th class="text-center" scope="col"><button value="activate" name="button25" type="submit" title="По возрастанию" style="background: antiquewhite; border: antiquewhite">	&#8593;</button>Стоимость<button value="activate" name="button25" type="submit" title="По убыванию" style="background: antiquewhite; border: antiquewhite">&#8595;</button></th>
+            <th class="text-center" scope="col">Тип траты</th>
+            <th class="text-center" scope="col">Стоимость</th>
             <th class="text-center" scope="col">Комментарий</th>
         </tr>
         </thead>

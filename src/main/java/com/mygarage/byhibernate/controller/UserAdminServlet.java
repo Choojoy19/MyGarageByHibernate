@@ -63,8 +63,9 @@ public class UserAdminServlet extends HttpServlet {
                 case "/info" -> informationForm(req, resp);
                 case "/userexpenses" -> listUserExpenses(req,resp);
                 case "/carexpenses" -> listCarExpenses(req,resp);
-                case "/sortexpbydesc" -> sortExpByDesc(req,resp);
-                default -> registrationForm(req, resp);
+                case "/ratingcalc" -> ratingCalc(req, resp);
+                default ->  registrationForm(req, resp);
+
             }
         } catch (ServletException| IOException exc){
             throw new ServletException(exc);
@@ -76,13 +77,28 @@ public class UserAdminServlet extends HttpServlet {
         doGet(req, resp);
     }
 
+    private void ratingCalc(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String brandSearch = req.getParameter("search");
+        Set<Car> cars = carService.findAll();
+        Set<Car> carsByModel = cars.stream().filter(car ->car.getBrand().equals(brandSearch)).collect(Collectors.toSet());
+        int counter=0;
+        double sumMark =0;
+        for (Car car: carsByModel){
+            sumMark += car.getMark();
+            counter++;
+        }
+        double rating = sumMark/counter;
+        resp.sendRedirect("listcar?search="+brandSearch+"&rating="+rating);
+
+    }
+
+
     private void listUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String search = req.getParameter("search");
         Set<User> users = userService.findAll();
         if (search != null) {
             users = users.stream().filter(user -> user.getName().contains(search) ||
-                    user.getLastName().contains(search) ||
-                    user.getCity().contains(search)).collect(Collectors.toSet());
+                    user.getLastName().contains(search)).collect(Collectors.toSet());
         }
         req.setAttribute("listUser", users);
         ServletContext servletContext = getServletContext();
@@ -94,9 +110,12 @@ public class UserAdminServlet extends HttpServlet {
         String search = req.getParameter("search");
         Set<Car> cars = carService.findAll();
         if (search != null) {
-            cars = cars.stream().filter(car -> car.getBrand().contains(search)&&car.getModel().contains(search)).collect(Collectors.toSet());
+            cars = cars.stream().filter(car -> car.getBrand().contains(search)).collect(Collectors.toSet());
+            req.setAttribute("search", search);
         }
         req.setAttribute("listCars", cars);
+        String rating = req.getParameter("rating");
+        req.setAttribute("rating", rating);
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/list-cars.jsp");
         dispatcher.forward(req, resp);
@@ -194,13 +213,6 @@ public class UserAdminServlet extends HttpServlet {
         car.setExpenses(expenses);
         carService.update(car);
         resp.sendRedirect("carexpenses?id="+id);
-    }
-
-    private void sortExpByDesc(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    HttpSession session= req.getSession();
-    User user = (User) session.getAttribute("user");
-    long id = user.getId();
-
     }
 
 
@@ -354,7 +366,6 @@ public class UserAdminServlet extends HttpServlet {
     private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         User existedUser = userService.findById(id);
-        // List<Car> cars = existedUser.getCars();
         req.setAttribute("existedUser", existedUser);
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/edit-user.jsp");

@@ -3,20 +3,17 @@ package com.mygarage.byhibernate.repository.impl;
 import com.mygarage.byhibernate.config.ConfigSessionFactory;
 import com.mygarage.byhibernate.model.Car;
 import com.mygarage.byhibernate.repository.BaseRepository;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import javax.persistence.NoResultException;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CarRepositoryImpl implements BaseRepository<Car> {
     @Override
     public Set<Car> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
 
-        return (Set<Car>) session.createQuery("from Car").getResultList();
+        return (Set<Car>) session.createQuery("from Car").stream().collect(Collectors.toSet());
     }
 
     @Override

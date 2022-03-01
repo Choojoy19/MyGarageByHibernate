@@ -31,10 +31,11 @@
                         <li class="nav-item">
                             <div class="d-flex">
                                 <form action="search" method="post">
-                                    <input class="form-control me-2" type="search" name="search" placeholder="Search"
+                                    <input class="form-control me-2" type="search" name="search"  placeholder="Search"
                                            aria-label="Search">
-                                    <button class="btn btn-outline-light" type="submit">Search</button>
-                                    </c:if>
+                        <button class="btn btn-outline-light" type="submit">Search <c:if test="${sessionScope.userRole!='ADMIN'}">by brand</c:if>
+                            </c:if></button>
+
 
                                 </form>
                             </div>

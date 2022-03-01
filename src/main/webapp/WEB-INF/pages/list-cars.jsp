@@ -26,6 +26,7 @@
             <th class="text-center" scope="col">Цвет</th>
             <th class="text-center" scope="col">Оценка</th>
             <th class="text-center" scope="col">Комментарий</th>
+            <th></th>
 
         </tr>
         </thead>
@@ -41,10 +42,15 @@
                 <td class="text-center align-middle">${car.color}</td>
                 <td class="text-center align-middle">${car.mark}</td>
                 <td class="text-center align-middle">${car.comment}</td>
-
-
+                <c:if test="${requestScope.search!=null}" >
+                    <td> <a href="ratingcalc?search=${requestScope.search}" class="btn btn-secondary" role="button">Рейтинг марки</a>
+                        <label style="background: orange"> ${requestScope.rating}</label>
+                    </td>
+                </c:if>
             </tr>
         </c:forEach>
+
+
     </table>
 </div>
 </body>
