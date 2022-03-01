@@ -85,8 +85,7 @@
 
         <td class="text-center align-middle">
             <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="editexpense?id=${expenses.id}" class="btn btn-primary" role="button">Редактировать</a>
-                <a href="deleteexpense?id=${expenses.id}" class="btn btn-secondary" role="button">Удалить</a>
+                <a href="deleteexpense?id=${expenses.id}&carid=${requestScope.car.id}" class="btn btn-secondary" role="button">Удалить</a>
             </div>
         </td>
 

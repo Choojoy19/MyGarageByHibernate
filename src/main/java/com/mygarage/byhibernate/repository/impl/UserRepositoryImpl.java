@@ -2,18 +2,15 @@ package com.mygarage.byhibernate.repository.impl;
 
 import com.mygarage.byhibernate.config.ConfigSessionFactory;
 import com.mygarage.byhibernate.model.User;
-import com.mygarage.byhibernate.repository.BaseRepository;
-import com.mygarage.byhibernate.repository.BaseUserRepository;
+import com.mygarage.byhibernate.repository.UserRepository;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import javax.persistence.NoResultException;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UserRepositoryImpl implements BaseUserRepository<User> {
+public class UserRepositoryImpl implements UserRepository {
     @Override
     public Set<User> findAll() {
         Session session = ConfigSessionFactory.getSessionFactory().openSession();
@@ -95,4 +92,15 @@ public class UserRepositoryImpl implements BaseUserRepository<User> {
             return null;
         }
     }
+
+    @Override
+    public boolean isExistByLogin(String login) {
+        Session session = ConfigSessionFactory.getSessionFactory().openSession();
+        boolean exists = session.createQuery("from User u where u.login=: login").setString("login",login).setMaxResults(1).uniqueResult() != null;
+            if (exists) {
+                return true;
+            }
+            return false;
+    }
+
 }

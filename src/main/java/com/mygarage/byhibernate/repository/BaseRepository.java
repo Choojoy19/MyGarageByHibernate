@@ -1,6 +1,4 @@
 package com.mygarage.byhibernate.repository;
-
-import java.util.List;
 import java.util.Set;
 
 public interface BaseRepository<T> {

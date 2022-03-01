@@ -28,7 +28,7 @@
             <th class="text-center" scope="col"><button value="sortByDateAsc" name="sortByDateAsc" onclick="" type="submit" title="По возрастанию" style="background: antiquewhite; border: antiquewhite">	&#8593;</button>Дата<button value="activate" name="button25" type="submit" title="По убыванию" style="background: antiquewhite; border: antiquewhite">&#8595;</button></th>
             <th class="text-center" scope="col">Марка</th>
             <th class="text-center" scope="col">Модель</th>
-            <th class="text-center" scope="col"><button value="activate" name="button25" type="submit" title="По возрастанию" style="background: antiquewhite; border: antiquewhite">	&#8593;</button>Тип траты<button value="activate" name="button25" type="submit" title="По убыванию" style="background: antiquewhite; border: antiquewhite">&#8595;</button></th>
+            <th class="text-center" scope="col"><a href="deleteexpense?id=${expenses.id}&carid=${requestScope.car.id}" title="По убыванию" role="button" style="background: antiquewhite; border: antiquewhite">&#8595;</a>Тип траты</th>
             <th class="text-center" scope="col"><button value="activate" name="button25" type="submit" title="По возрастанию" style="background: antiquewhite; border: antiquewhite">	&#8593;</button>Стоимость<button value="activate" name="button25" type="submit" title="По убыванию" style="background: antiquewhite; border: antiquewhite">&#8595;</button></th>
             <th class="text-center" scope="col">Комментарий</th>
         </tr>
@@ -37,8 +37,8 @@
             <tr>
                 <th class="text-center align-middle" scope="row">${st.index}</th>
                 <td class="text-center align-middle">${expenses.date}</td>
-                <td class="text-center align-middle">${requestScope.car.brand}</td>
-                <td class="text-center align-middle">${requestScope.car.model}</td>
+                <td class="text-center align-middle">${expenses.car.brand}</td>
+                <td class="text-center align-middle">${expenses.car.model}</td>
                 <td class="text-center align-middle">${expenses.typeOfExpense}</td>
                 <td class="text-center align-middle">${expenses.price}</td>
                 <td class="text-center align-middle">${expenses.commentExp}</td>

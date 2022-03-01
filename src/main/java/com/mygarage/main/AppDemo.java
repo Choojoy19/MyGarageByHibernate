@@ -3,15 +3,13 @@ import com.mygarage.byhibernate.model.Car;
 import com.mygarage.byhibernate.model.Role;
 import com.mygarage.byhibernate.model.User;
 import com.mygarage.byhibernate.service.BaseService;
-import com.mygarage.byhibernate.service.BaseUserService;
+import com.mygarage.byhibernate.service.UserService;
 import com.mygarage.byhibernate.service.impl.CarServiceImpl;
 import com.mygarage.byhibernate.service.impl.UserServiceImpl;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AppDemo {
     public static void main(String[] args) {
-        BaseUserService<User> userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
         BaseService<Car> carService = new CarServiceImpl();
 
 

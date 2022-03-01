@@ -12,10 +12,15 @@ public class Expenses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDate date; //LocalDate
+    private LocalDate date;
     private String typeOfExpense;
     private int price;
     private String commentExp;
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
+
+
 
     public Expenses(){}
 
@@ -24,6 +29,10 @@ public class Expenses {
         this.typeOfExpense = typeOfExpense;
         this.price = price;
         this.commentExp = commentExp;
+    }
+
+    public Car getCar() {
+        return car;
     }
 
     public long getId() {

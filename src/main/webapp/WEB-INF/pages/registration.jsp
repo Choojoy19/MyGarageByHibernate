@@ -14,19 +14,19 @@
 
 </div>
 <div style= "width:100%; height:100%; background: black; top: 70px">
-    <form action="add" method="post" style="width:28%; height:300px; position: absolute; left: 530px">
+    <form action="add" id="regForm" method="post" style="width:28%; height:300px; position: absolute; left: 530px">
         <div class="mt-2">
             <label for="chooseLogIn" class="form-label" style= "color:orange; font-size: large">Логин</label>
             <input type="text" class="form-control" name="login" id="chooseLogIn" required>
             <div id="emailHelp" class="form-text" style="font-size: small">Используйте только латинские буквы и цифры</div>
         </div>
         <div class="mb-2">
-            <label for="pass" class="form-label" style= "color:orange; font-size: large">Пароль</label>
-            <input type="password" class="form-control" name="password" id="pass" required>
+            <label for="password1" class="form-label" style= "color:orange; font-size: large">Пароль</label>
+            <input type="password" class="form-control" name="password1" id="password1" required>
         </div>
         <div class="mb-2">
-            <label for="repPass" class="form-label" style= "color:orange; font-size: large">Повторите пароль</label>
-            <input type="password" class="form-control" name="password1" id="repPass" required>
+            <label for="password2" class="form-label" style= "color:orange; font-size: large">Повторите пароль</label>
+            <input type="password" class="form-control" name="password2" id="password2" required>
         </div>
         <div id="errorBlock"></div>
         <div class="mb-2">
@@ -46,12 +46,12 @@
             <input type="text" class="form-control" name="age" id="age">
         </div>
 
-        <button type="submit" class="btn btn-dark">Регистрация</button>
+        <button type="submit" class="btn btn-dark" onclick="validateForm()">Регистрация</button>
         <button type="reset" class="btn btn-dark">Очистить форму</button>
         </br>
-      <%--  <c:if test="">
-            <p class="text-start text-danger">Такой логин существует! Попробуйте еще раз</p>
-        </c:if> --%>
+        <c:if test="${requestScope.isExistLogin == true}">
+            <p class="text-start text-danger">Такой логин существует!</p>
+        </c:if>
     </form>
     <script>
         <%@ include file="../../JS/confirmPassword.js" %>

@@ -2,7 +2,7 @@ package com.mygarage.byhibernate.controller;
 
 import com.mygarage.byhibernate.model.*;
 import com.mygarage.byhibernate.service.BaseService;
-import com.mygarage.byhibernate.service.BaseUserService;
+import com.mygarage.byhibernate.service.UserService;
 import com.mygarage.byhibernate.service.ExpensesService;
 import com.mygarage.byhibernate.service.impl.CarServiceImpl;
 import com.mygarage.byhibernate.service.impl.ExpensesServiceImpl;
@@ -17,22 +17,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @WebServlet("/")
 public class UserAdminServlet extends HttpServlet {
-    private BaseUserService<User> service;
+    private UserService userService;
     private BaseService<Car> carService;
     private ExpensesService expensesService;
 
     public void init() {
-        service = new UserServiceImpl();
+        userService = new UserServiceImpl();
         carService = new CarServiceImpl();
         expensesService = new ExpensesServiceImpl();
     }
@@ -65,6 +63,7 @@ public class UserAdminServlet extends HttpServlet {
                 case "/info" -> informationForm(req, resp);
                 case "/userexpenses" -> listUserExpenses(req,resp);
                 case "/carexpenses" -> listCarExpenses(req,resp);
+                case "/sortexpbydesc" -> sortExpByDesc(req,resp);
                 default -> registrationForm(req, resp);
             }
         } catch (ServletException| IOException exc){
@@ -79,7 +78,7 @@ public class UserAdminServlet extends HttpServlet {
 
     private void listUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String search = req.getParameter("search");
-        Set<User> users = service.findAll();
+        Set<User> users = userService.findAll();
         if (search != null) {
             users = users.stream().filter(user -> user.getName().contains(search) ||
                     user.getLastName().contains(search) ||
@@ -110,9 +109,7 @@ public class UserAdminServlet extends HttpServlet {
         req.setAttribute("id", id);
         req.setAttribute("car", car);
         String sumExpOut= req.getParameter("sumExpOut");
-       // if (sumExpOut!=null ){
-            req.setAttribute("sumExpOut",sumExpOut);
-
+        req.setAttribute("sumExpOut",sumExpOut);
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/list-carexpenses.jsp");
         dispatcher.forward(req, resp);
@@ -141,17 +138,7 @@ public class UserAdminServlet extends HttpServlet {
         for (Car car: cars){
             expenses.addAll( car.getExpenses());
         }
-        String sortByDateAsc = req.getParameter("sortByDateAsc");
-//        if (sortByDateAsc==){
-//            expenses = expenses.s
-       // }
-        //Query query = session.createQuery(hql);
-       // List<Expenses> expenses = cars.stream().filter(car -> car.getExpenses()).collect.toList();
-//        if (search != null) {
-//            cars = cars.stream().filter(car -> car.getBrand().contains(search)||car.getModel().contains(search)).collect(Collectors.toList());
-//        }
         req.setAttribute("listUserExpenses", expenses);
-        req.setAttribute("cars", cars);
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/list-userexpenses.jsp");
         dispatcher.forward(req, resp);
@@ -161,8 +148,7 @@ public class UserAdminServlet extends HttpServlet {
         HttpSession session = req.getSession();
         User user=(User) session.getAttribute("user");
         long userId = user.getId();
-        req.setAttribute("cars", service.findById(userId).getCars());
-//        req.setAttribute("cars", user.getCars());
+        req.setAttribute("cars", userService.findById(userId).getCars());
         ServletContext servletContext = getServletContext();
         RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/user-cabinet.jsp");
         dispatcher.forward(req, resp);
@@ -186,11 +172,11 @@ public class UserAdminServlet extends HttpServlet {
         car.setMark(mark);
         car.setEngineType(engineType1);
         User user=(User) session.getAttribute("user");
-        User userBd = service.findById(user.getId());
+        User userBd = userService.findById(user.getId());
         Set<Car> cars = userBd.getCars();
         cars.add(car);
         userBd.setCars(cars);
-        service.update(userBd);
+        userService.update(userBd);
         session.setAttribute("user", userBd);
         resp.sendRedirect("cabinet");
     }
@@ -202,20 +188,27 @@ public class UserAdminServlet extends HttpServlet {
         int price = Integer.parseInt(req.getParameter("price"));
         String commentExp = req.getParameter("commentexp");
         Expenses expense = new Expenses(date,typeOfExpense,price,commentExp);
-        //expensesService.create(expense);
         Car car = carService.findById(id);
         Set<Expenses> expenses = car.getExpenses();
         expenses.add(expense);
         car.setExpenses(expenses);
         carService.update(car);
-        //req.setAttribute("expenses", expenses);
         resp.sendRedirect("carexpenses?id="+id);
     }
 
+    private void sortExpByDesc(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    HttpSession session= req.getSession();
+    User user = (User) session.getAttribute("user");
+    long id = user.getId();
+
+    }
+
+
     private void deleteExpense(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
+        String carId = req.getParameter("carid");
         expensesService.deleteById(id);
-        resp.sendRedirect("carexpenses?id="+id);
+        resp.sendRedirect("carexpenses?id="+carId);
     }
 
     private void addUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -232,19 +225,26 @@ public class UserAdminServlet extends HttpServlet {
         user.setLogin(login);
         user.setPassword(password);
         user.setRole(role);
-        boolean isAdded = service.create(user);
-        if (isAdded) {
-            session.setAttribute("user", user);
-            session.setAttribute("userRole", user.getRole().name());
+        if (userService.isExistByLogin(login)){
+            req.setAttribute("isExistLogin", true);
+            ServletContext servletContext = getServletContext();
+            RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/pages/registration.jsp");
+            dispatcher.forward(req, resp);
+        } else {
+            boolean isAdded = userService.create(user);
+            if (isAdded) {
+                session.setAttribute("user", user);
+                session.setAttribute("userRole", user.getRole().name());
+            }
+            resp.sendRedirect("cabinet");
         }
-        resp.sendRedirect("cabinet");
     }
 
     private void loginUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        User user = service.findByLoginAndPassword(login, password);
+        User user = userService.findByLoginAndPassword(login, password);
         if (user != null) {
             session.setAttribute("user", user);
             session.setAttribute("userRole", user.getRole().name());
@@ -283,7 +283,7 @@ public class UserAdminServlet extends HttpServlet {
         user.setPassword(password);
         Role role = Role.USER;
         user.setRole(role);
-        service.update(user);
+        userService.update(user);
         resp.sendRedirect("list");
     }
 
@@ -309,7 +309,7 @@ public class UserAdminServlet extends HttpServlet {
 
     private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        service.deleteById(id);
+        userService.deleteById(id);
         resp.sendRedirect("list");
     }
 
@@ -318,9 +318,9 @@ public class UserAdminServlet extends HttpServlet {
         carService.deleteById(id);
         HttpSession session = req.getSession();
         User user=(User) session.getAttribute("user");
-        User userBd = service.findById(user.getId());
+        User userBd = userService.findById(user.getId());
         Set<Car> cars = userBd.getCars();
-        service.update(userBd);
+        userService.update(userBd);
         session.setAttribute("user", userBd);
         resp.sendRedirect("cabinet");
     }
@@ -353,7 +353,7 @@ public class UserAdminServlet extends HttpServlet {
 
     private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        User existedUser = service.findById(id);
+        User existedUser = userService.findById(id);
         // List<Car> cars = existedUser.getCars();
         req.setAttribute("existedUser", existedUser);
         ServletContext servletContext = getServletContext();
